@@ -79,6 +79,91 @@ export const createCheckout = createServerFn({ method: 'POST' })
   })
 ```
 
+## 🔐 Understanding authorizeReference
+
+The `authorizeReference` function is a **security callback** that Better Auth calls internally to verify permissions before any subscription operation. **You never call this function directly** - Better Auth invokes it automatically.
+
+### How It Works
+
+1. **Definition**: You define `authorizeReference` in your Better Auth configuration
+2. **Automatic Invocation**: Better Auth calls it when you use subscription APIs with a `referenceId`
+3. **Permission Check**: It verifies if the current user can manage billing for the given organization
+
+### When It's Called
+
+Better Auth automatically invokes `authorizeReference` when these methods receive a `referenceId`:
+
+```typescript
+// When you call this in your server function:
+await auth.api.upgradeSubscription({
+  body: {
+    plan: 'pro',
+    referenceId: orgId, // ← This triggers authorizeReference
+  },
+  headers: context.headers,
+})
+
+// Better Auth internally:
+// 1. Extracts the user from headers
+// 2. Calls authorizeReference({ user, referenceId: orgId, action: 'upgrade' })
+// 3. Only proceeds if it returns true
+```
+
+### Example Flow
+
+```typescript
+// In billing.server.ts - Your code
+export const createCheckout = createServerFn({ method: 'POST' })
+  .handler(async ({ data, context }) => {
+    const orgId = context.organizationId
+    
+    // This call triggers authorizeReference internally
+    const result = await auth.api.upgradeSubscription({
+      body: {
+        plan: 'pro',
+        referenceId: orgId, // ← Triggers permission check
+      },
+      headers: context.headers,
+    })
+    
+    // If authorizeReference returned false, Better Auth would throw an error
+    // and this line would never be reached
+    return { checkoutUrl: result.url }
+  })
+
+// In auth.ts - Your callback definition
+authorizeReference: async ({ user, referenceId }) => {
+  // Better Auth calls this automatically
+  // You never invoke it directly
+  const member = await db.member.findFirst({
+    where: {
+      userId: user.id,
+      organizationId: referenceId
+    }
+  })
+  
+  // Return true if user can manage billing
+  return member?.role === 'owner' || member?.role === 'admin'
+}
+```
+
+### Methods That Trigger authorizeReference
+
+All these Better Auth API methods trigger the callback when called with a `referenceId`:
+
+- `auth.api.upgradeSubscription()` - Creating checkout sessions
+- `auth.api.listActiveSubscriptions()` - Fetching subscription data
+- `auth.api.createBillingPortal()` - Opening Stripe customer portal
+- `auth.api.cancelSubscription()` - Cancelling subscriptions
+- `auth.api.restoreSubscription()` - Restoring cancelled subscriptions
+
+### Important Notes
+
+- **Never bypass this check** - Always include `referenceId` in subscription operations
+- **It's working even if it looks unused** - IDEs won't show it as "used" because Better Auth calls it internally
+- **Double-check permissions** - You can add additional `checkPermission()` calls for defense in depth
+- **Organization scoping is critical** - The `referenceId` ensures subscriptions are bound to organizations
+
 ## ✅ Established Patterns
 
 ### 1. **Plan Configuration**
@@ -166,7 +251,16 @@ export const auth = betterAuth({
       cancelUrl: `${process.env.BETTER_AUTH_URL}/billing`,
       subscription: {
         enabled: true,
+        // IMPORTANT: authorizeReference is a callback that Better Auth calls internally
+        // It's invoked automatically when subscription operations include a referenceId
+        // This ensures only authorized users can manage billing for an organization
         authorizeReference: async ({ user, referenceId }) => {
+          // This function is called by Better Auth when:
+          // - auth.api.upgradeSubscription() is called with referenceId
+          // - auth.api.listActiveSubscriptions() is called with referenceId  
+          // - auth.api.createBillingPortal() is called with referenceId
+          // - auth.api.cancelSubscription() is called with referenceId
+          
           // Check if user can manage billing for this organization
           const membership = await db
             .select()
@@ -180,10 +274,11 @@ export const auth = betterAuth({
             .limit(1)
 
           if (membership.length === 0) {
-            return false
+            return false // User is not a member of this organization
           }
 
           const member = membership[0]
+          // Only owners and admins can manage billing
           return member.role === 'owner' || member.role === 'admin'
         },
         plans: [

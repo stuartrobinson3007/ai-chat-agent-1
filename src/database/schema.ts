@@ -39,19 +39,6 @@ export const account = pgTable('account', {
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
 
-export const session = pgTable('session', {
-  id: text('id').primaryKey(),
-  userId: text('user_id')
-    .notNull()
-    .references(() => user.id, { onDelete: 'cascade' }),
-  expiresAt: timestamp('expires_at').notNull(),
-  ipAddress: text('ip_address'),
-  userAgent: text('user_agent'),
-  activeOrganizationId: text('active_organization_id'),
-  impersonatedBy: text('impersonated_by'),
-  createdAt: timestamp('created_at').defaultNow().notNull(),
-  updatedAt: timestamp('updated_at').defaultNow().notNull(),
-})
 
 export const verification = pgTable('verification', {
   id: text('id').primaryKey(),

@@ -10,7 +10,7 @@ export const BILLING_PLANS = {
       prioritySupport: false,
     },
     limits: {
-      todos: 10,
+      todos: 20,
       members: 2,
       storage: 100, // MB
     },

@@ -87,14 +87,14 @@ const getAuthConfig = serverOnly(() =>
       },
     },
 
-    // session: {
-    //   cookieCache: {
-    //     enabled: true,
-    //     maxAge: 5 * 60, // 5 minutes
-    //   },
-    //   expiresIn: 60 * 60 * 24 * 7, // 7 days
-    //   updateAge: 60 * 60 * 24 // 1 day
-    // },
+    session: {
+      cookieCache: {
+        enabled: true,
+        maxAge: 5 * 60, // 5 minutes
+      },
+      expiresIn: 60 * 60 * 24 * 7, // 7 days
+      updateAge: 60 * 60 * 24 // 1 day
+    },
 
     secondaryStorage: {
       get: async key => {
@@ -175,6 +175,10 @@ const getAuthConfig = serverOnly(() =>
               },
             }
           },
+          // IMPORTANT: This callback is invoked internally by Better Auth
+          // when subscription APIs are called with a referenceId.
+          // It verifies if the user can manage billing for the organization.
+          // You don't call this directly - Better Auth handles it automatically.
           authorizeReference: async ({ user, referenceId }) => {
             // Allow users to manage subscriptions for their organizations
             // Check if user is a member of the organization with billing permissions
