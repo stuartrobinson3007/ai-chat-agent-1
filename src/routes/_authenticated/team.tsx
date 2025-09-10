@@ -694,6 +694,7 @@ function Team() {
           isFetching={isFetching}
           loadingRows={loadingMembers}
           getRowIdProp={row => row.id}
+          className='h-[600px]'
         />
       </div>
 

@@ -465,6 +465,7 @@ function SuperAdminUsers() {
           isLoading={isLoading}
           isFetching={isFetching}
           getRowIdProp={row => row.id}
+          className='h-[600px]'
         />
       </div>
 

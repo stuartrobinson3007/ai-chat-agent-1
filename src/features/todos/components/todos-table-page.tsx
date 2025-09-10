@@ -653,7 +653,7 @@ export function TodosTablePage() {
             loadingRows={loadingTodos}
             getRowIdProp={row => row.id}
             onRowClick={handleRowClick}
-            className="max-h-[600px]"
+            className="h-[600px]"
           />
         )}
       </div>
