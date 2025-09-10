@@ -695,6 +695,8 @@ function Team() {
           loadingRows={loadingMembers}
           getRowIdProp={row => row.id}
           className='h-[600px]'
+          resetText={tCommon('actions.reset')}
+          noResultsText={tCommon('messages.noResults')}
         />
       </div>
 

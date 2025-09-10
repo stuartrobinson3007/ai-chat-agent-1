@@ -654,6 +654,8 @@ export function TodosTablePage() {
             getRowIdProp={row => row.id}
             onRowClick={handleRowClick}
             className="h-[600px]"
+            resetText={tCommon('actions.reset')}
+            noResultsText={tCommon('messages.noResults')}
           />
         )}
       </div>

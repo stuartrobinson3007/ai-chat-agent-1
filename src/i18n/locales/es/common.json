@@ -35,7 +35,8 @@
     "markComplete": "Marcar como completa",
     "undo": "Deshacer",
     "invite": "Invitar",
-    "done": "Hecho"
+    "done": "Hecho",
+    "reset": "Restablecer"
   },
   "states": {
     "loading": "Cargando...",

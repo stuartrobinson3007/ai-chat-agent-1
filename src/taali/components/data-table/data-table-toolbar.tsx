@@ -21,12 +21,14 @@ interface DataTableToolbarProps<TData> {
   table: Table<TData>
   config?: DataTableConfig<TData>
   className?: string
+  resetText?: string
 }
 
 export function DataTableToolbar<TData>({
   table,
   config = {},
   className,
+  resetText = 'Reset',
 }: DataTableToolbarProps<TData>) {
   const { t: tCommon } = useTranslation('common')
   const isFiltered = table.getState().columnFilters.length > 0
@@ -129,7 +131,7 @@ export function DataTableToolbar<TData>({
             onClick={() => table.resetColumnFilters()}
             className="h-8 px-2 lg:px-3"
           >
-            Reset
+            {resetText}
             <X className="ml-2 h-4 w-4" />
           </Button>
         )}

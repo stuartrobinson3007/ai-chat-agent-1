@@ -49,6 +49,8 @@ interface DataTableProps<TData, TValue> {
   className?: string
   toolbarClassName?: string
   containerClassName?: string
+  noResultsText?: string
+  resetText?: string
 }
 
 export function DataTable<TData, TValue>({
@@ -68,6 +70,8 @@ export function DataTable<TData, TValue>({
   className,
   toolbarClassName,
   containerClassName,
+  noResultsText = 'No results.',
+  resetText,
 }: DataTableProps<TData, TValue>) {
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({})
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
@@ -290,7 +294,7 @@ export function DataTable<TData, TValue>({
   return (
     <div className={cn('space-y-4', containerClassName)}>
       {enableColumnFilters && (
-        <DataTableToolbar table={table} config={config} className={toolbarClassName} />
+        <DataTableToolbar table={table} config={config} className={toolbarClassName} resetText={resetText} />
       )}
       <div
         className={cn(
@@ -422,7 +426,7 @@ export function DataTable<TData, TValue>({
             ) : (
               <TableRow>
                 <TableCell colSpan={table.getAllLeafColumns().length} className="h-24 text-center">
-                  No results.
+                  {noResultsText}
                 </TableCell>
               </TableRow>
             )}

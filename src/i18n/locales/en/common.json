@@ -36,7 +36,8 @@
     "markComplete": "Mark as complete",
     "undo": "Undo",
     "invite": "Invite",
-    "done": "Done"
+    "done": "Done",
+    "reset": "Reset"
   },
   "states": {
     "loading": "Loading...",
