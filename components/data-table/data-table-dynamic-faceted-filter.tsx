@@ -19,12 +19,12 @@ import {
   FacetedTrigger,
 } from '../ui/faceted'
 import { Separator } from '../ui/separator'
-import { cn } from '@/taali/lib/utils'
 
 import { DataTableFilterOption } from './types'
 
+import { cn } from '@/taali/lib/utils'
 import { useTranslation } from '@/i18n/hooks/useTranslation'
-import { getTableFilterValue } from '@/lib/utils/type-safe-access'
+import { getTableFilterValue } from '@/taali/utils/type-safe-access'
 
 interface DataTableDynamicFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>

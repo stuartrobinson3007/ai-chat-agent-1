@@ -18,12 +18,14 @@ import {
 import * as React from 'react'
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../ui/table'
-import { cn } from '@/taali/lib/utils'
+
 
 import { DataTablePagination } from './data-table-pagination'
 import { DataTableToolbar } from './data-table-toolbar'
 import { DataTableBulkActions } from './data-table-bulk-actions'
 import { DataTableConfig, SelectionState, ServerQueryParams } from './types'
+
+import { cn } from '@/taali/lib/utils'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -88,6 +90,11 @@ export function DataTable<TData, TValue>({
     resizingConfig = {},
     loadingConfig = {},
   } = config
+
+  const [pagination, setPagination] = React.useState({
+    pageIndex: 0,
+    pageSize: paginationConfig.defaultPageSize || 10,
+  })
 
   const {
     enableColumnResizing = true,
@@ -198,6 +205,7 @@ export function DataTable<TData, TValue>({
       columnFilters,
       globalFilter,
       columnSizing,
+      pagination,
     },
     enableRowSelection,
     enableColumnResizing,
@@ -209,6 +217,7 @@ export function DataTable<TData, TValue>({
     onColumnVisibilityChange: setColumnVisibility,
     onGlobalFilterChange: setGlobalFilter,
     onColumnSizingChange: setColumnSizing,
+    onPaginationChange: setPagination,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: manualFiltering ? undefined : getFilteredRowModel(),
     getPaginationRowModel: manualPagination ? undefined : getPaginationRowModel(),
@@ -220,12 +229,11 @@ export function DataTable<TData, TValue>({
     manualSorting,
     ...(manualPagination && totalCount
       ? {
-          pageCount: Math.ceil(totalCount / (paginationConfig.defaultPageSize || 10)),
+          pageCount: Math.ceil(totalCount / pagination.pageSize),
         }
       : {}),
   })
 
-  const paginationState = table.getState().pagination
   React.useEffect(() => {
     if (onStateChange) {
       onStateChange({
@@ -233,8 +241,8 @@ export function DataTable<TData, TValue>({
         columnFilters,
         sorting,
         pagination: {
-          pageIndex: paginationState.pageIndex,
-          pageSize: paginationState.pageSize,
+          pageIndex: pagination.pageIndex,
+          pageSize: pagination.pageSize,
         },
       })
     }
@@ -242,16 +250,11 @@ export function DataTable<TData, TValue>({
     globalFilter,
     columnFilters,
     sorting,
-    paginationState.pageIndex,
-    paginationState.pageSize,
+    pagination.pageIndex,
+    pagination.pageSize,
     onStateChange,
   ])
 
-  React.useEffect(() => {
-    if (paginationConfig.defaultPageSize) {
-      table.setPageSize(paginationConfig.defaultPageSize)
-    }
-  }, [paginationConfig.defaultPageSize, table])
 
   // Current selection state for parent component
   const selectionState: SelectionState = React.useMemo(

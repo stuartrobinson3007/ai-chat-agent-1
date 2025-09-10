@@ -3,7 +3,6 @@
 import { ChevronsUpDown, Circle } from 'lucide-react'
 import * as React from 'react'
 
-import { cn } from '@/taali/lib/utils'
 
 import { Badge } from './badge'
 import { Checkbox } from './checkbox'
@@ -18,6 +17,7 @@ import {
 } from './command'
 import { Popover, PopoverContent, PopoverTrigger } from './popover'
 
+import { cn } from '@/taali/lib/utils'
 import { useTranslation } from '@/i18n/hooks/useTranslation'
 
 type FacetedValue<Multiple extends boolean> = Multiple extends true ? string[] : string

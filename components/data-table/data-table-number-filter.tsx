@@ -7,8 +7,8 @@ import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import { Slider } from '../ui/slider'
-import { cn } from '@/taali/lib/utils'
 
+import { cn } from '@/taali/lib/utils'
 import { useTranslation } from '@/i18n/hooks/useTranslation'
 
 interface DataTableNumberFilterProps<TData, TValue> {

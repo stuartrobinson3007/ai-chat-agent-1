@@ -5,10 +5,10 @@ import { X } from 'lucide-react'
 
 import { Button } from '../ui/button'
 import { Badge } from '../ui/badge'
-import { cn } from '@/taali/lib/utils'
 
 import { SelectionState, BulkAction } from './types'
 
+import { cn } from '@/taali/lib/utils'
 import { useTranslation } from '@/i18n/hooks/useTranslation'
 
 

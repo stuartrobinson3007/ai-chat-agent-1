@@ -4,9 +4,10 @@ import * as React from 'react'
 import { Command as CommandPrimitive } from 'cmdk'
 import { SearchIcon } from 'lucide-react'
 
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './dialog'
+
 import { cn } from '@/taali/lib/utils'
 
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from './dialog'
 
 function Command({ className, ...props }: React.ComponentProps<typeof CommandPrimitive>) {
   return (

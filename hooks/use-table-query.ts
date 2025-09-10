@@ -80,11 +80,32 @@ export function useTableQuery<TData>({
 
   // Handler for state changes from DataTable
   const handleStateChange = useCallback((newState: Partial<DataTableState>) => {
-    setTableState(prev => ({
-      ...prev,
-      ...newState,
-    }))
-  }, [])
+    setTableState(prev => {
+      // Check if page size is changing
+      if (newState.pagination?.pageSize && newState.pagination.pageSize !== prev.pagination.pageSize) {
+        // Calculate new page count with the new page size
+        const newPageCount = Math.ceil((query.data?.totalCount || 0) / newState.pagination.pageSize)
+        
+        // Check if current page index is still valid
+        if (newState.pagination.pageIndex >= newPageCount && newPageCount > 0) {
+          // Reset to first page if current page is invalid
+          return {
+            ...prev,
+            ...newState,
+            pagination: {
+              ...newState.pagination,
+              pageIndex: 0,
+            },
+          }
+        }
+      }
+      
+      return {
+        ...prev,
+        ...newState,
+      }
+    })
+  }, [query.data?.totalCount])
 
   // Reset filters
   const resetFilters = useCallback(() => {

@@ -6,7 +6,7 @@ import * as React from 'react'
 
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
-import { cn } from '@/taali/lib/utils'
+
 
 import { DataTableFacetedFilter } from './data-table-faceted-filter'
 import { DataTableDynamicFacetedFilter } from './data-table-dynamic-faceted-filter'
@@ -14,6 +14,7 @@ import { DataTableDateFilter } from './data-table-date-filter'
 import { DataTableNumberFilter } from './data-table-number-filter'
 import { DataTableConfig, DataTableColumnMeta } from './types'
 
+import { cn } from '@/taali/lib/utils'
 import { useTranslation } from '@/i18n/hooks/useTranslation'
 
 interface DataTableToolbarProps<TData> {

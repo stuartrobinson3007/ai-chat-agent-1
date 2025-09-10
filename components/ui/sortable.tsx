@@ -42,7 +42,6 @@ import * as ReactDOM from 'react-dom'
 
 import { cn } from '@/taali/lib/utils'
 import { useComposedRefs } from '@/taali/lib/compose-refs'
-
 import { useTranslation } from '@/i18n/hooks/useTranslation'
 
 const orientationConfig = {

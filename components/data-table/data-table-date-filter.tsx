@@ -8,8 +8,8 @@ import { format } from 'date-fns'
 import { Button } from '../ui/button'
 import { Calendar } from '../ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
-import { cn } from '@/taali/lib/utils'
 
+import { cn } from '@/taali/lib/utils'
 import { useTranslation } from '@/i18n/hooks/useTranslation'
 
 interface DataTableDateFilterProps<TData, TValue> {
