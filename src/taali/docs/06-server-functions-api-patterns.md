@@ -831,6 +831,101 @@ export const contextAwareAction = createServerFn({ method: 'POST' })
   })
 ```
 
+## 📊 Server-Side Table Sorting
+
+When implementing tables with `manualSorting: true`, the server must handle sorting logic. This requires proper column mapping and query building.
+
+### Column Mapping for Sorting
+
+Create a columnMap that maps frontend column IDs to database columns. **IMPORTANT**: Only include columns that should be sortable.
+
+```typescript
+// In your server function (e.g., getBookingsTable)
+const orderBy =
+  sorting.length > 0
+    ? sorting
+        .map((sort: { id: string; desc?: boolean }) => {
+          const columnMap: Record<string, PgColumn> = {
+            // Map column IDs to database columns
+            bookingDate: bookings.bookingDate,
+            customerName: bookings.customerName,
+            status: bookings.status,
+            duration: bookings.duration,
+            price: bookings.price,
+            // Note: Non-sortable columns like 'phone' are NOT included
+            
+            // Handle joined columns specially
+            serviceName: services.name, // From joined table
+          }
+          
+          const column = columnMap[sort.id]
+          return column ? (sort.desc ? desc(column) : asc(column)) : null
+        })
+        .filter(Boolean)
+    : [desc(bookings.createdAt)] // Default sort
+```
+
+### Complete Server-Side Sorting Example
+
+```typescript
+export const getTableData = createServerFn({ method: 'POST' })
+  .middleware([authMiddleware, organizationMiddleware])
+  .validator(validateServerQueryParams)
+  .handler(async ({ data, context }) => {
+    const { organizationId } = context
+    const { search, filters, sorting, pagination } = data
+    
+    // Build where conditions
+    const conditions: SQL[] = [eq(table.organizationId, organizationId)]
+    
+    // ... add search and filter conditions ...
+    
+    // Build order by - ONLY sortable columns
+    const orderBy =
+      sorting.length > 0
+        ? sorting.map((sort) => {
+            const columnMap: Record<string, PgColumn> = {
+              name: table.name,
+              createdAt: table.createdAt,
+              status: table.status,
+              // phone: table.phone, // Excluded - not sortable
+            }
+            
+            const column = columnMap[sort.id]
+            return column ? (sort.desc ? desc(column) : asc(column)) : null
+          }).filter(Boolean)
+        : [desc(table.createdAt)]
+    
+    // Execute query with sorting
+    const results = await db
+      .select()
+      .from(table)
+      .where(and(...conditions))
+      .orderBy(...(Array.isArray(orderBy) ? orderBy : [orderBy]))
+      .limit(pagination.pageSize)
+      .offset(pagination.pageIndex * pagination.pageSize)
+    
+    return { data: results, totalCount }
+  })
+```
+
+### Key Points for Server-Side Sorting
+
+1. **Column Map Requirements**:
+   - Include ONLY columns that have `enableSorting: true` in the frontend
+   - Map column IDs exactly as defined in the frontend ColumnDef
+   - Handle joined columns by mapping to the actual joined table column
+
+2. **Frontend-Backend Coordination**:
+   - Frontend column must have `enableSorting: true`
+   - Frontend column must use `DataTableHeader` with `sortable` prop
+   - Backend columnMap must include the column
+
+3. **Common Issues**:
+   - Sorting not working → Column missing from server columnMap
+   - Error on sort → Column ID mismatch between frontend and backend
+   - Joined data not sorting → Need to map to joined table column (e.g., `services.name`)
+
 ## 🧪 Testing Requirements
 
 ### Server Function Testing

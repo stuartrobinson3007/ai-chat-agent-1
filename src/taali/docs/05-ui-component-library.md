@@ -736,7 +736,12 @@ const columns: ColumnDef<TodoData>[] = [
   },
   {
     accessorKey: 'title',
-    header: 'Title',
+    header: ({ column }) => (
+      <DataTableHeader column={column} sortable>
+        Title
+      </DataTableHeader>
+    ),
+    enableSorting: true,
     meta: {
       filterConfig: {
         type: 'text',
@@ -746,7 +751,12 @@ const columns: ColumnDef<TodoData>[] = [
   },
   {
     accessorKey: 'completed',
-    header: 'Status',
+    header: ({ column }) => (
+      <DataTableHeader column={column} sortable>
+        Status
+      </DataTableHeader>
+    ),
+    enableSorting: true,
     meta: {
       filterConfig: {
         type: 'select',
@@ -1125,7 +1135,12 @@ Before considering UI component implementation complete, verify:
 const advancedColumns: ColumnDef<TodoData>[] = [
   {
     accessorKey: 'assignedTo',
-    header: 'Assigned To',
+    header: ({ column }) => (
+      <DataTableHeader column={column} sortable>
+        Assigned To
+      </DataTableHeader>
+    ),
+    enableSorting: true,
     meta: {
       filterConfig: {
         type: 'dynamicSelect',
@@ -1143,7 +1158,12 @@ const advancedColumns: ColumnDef<TodoData>[] = [
   },
   {
     accessorKey: 'priority',
-    header: 'Priority',
+    header: ({ column }) => (
+      <DataTableHeader column={column} sortable>
+        Priority
+      </DataTableHeader>
+    ),
+    enableSorting: true,
     meta: {
       filterConfig: {
         type: 'select',
@@ -1186,6 +1206,117 @@ export function useEditTodoForm(todoId: string) {
     isLoading: !todo,
     isSaving: autosave.isSaving || updateMutation.isPending,
   }
+}
+```
+
+## 📊 Column Header Patterns
+
+### Regular Data Columns
+
+**IMPORTANT**: ALL regular data columns MUST use the `DataTableHeader` component for consistency, regardless of whether they are sortable or not.
+
+#### Sortable Column Pattern
+```typescript
+{
+  accessorKey: 'customerName',
+  header: ({ column }) => (
+    <DataTableHeader column={column} sortable>
+      Customer Name
+    </DataTableHeader>
+  ),
+  enableSorting: true,
+  cell: ({ row }) => row.original.customerName,
+}
+```
+
+#### Non-Sortable Column Pattern
+```typescript
+{
+  accessorKey: 'phone',
+  header: ({ column }) => (
+    <DataTableHeader column={column}>
+      Phone
+    </DataTableHeader>
+  ),
+  enableSorting: false,
+  cell: ({ row }) => row.original.phone || 'N/A',
+}
+```
+
+### Special Columns (Exceptions)
+
+These column types should NOT use DataTableHeader:
+
+#### Selection/Checkbox Columns
+```typescript
+{
+  id: 'select',
+  header: ({ table }) => (
+    <Checkbox
+      checked={table.getIsAllPageRowsSelected()}
+      onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+    />
+  ),
+  cell: ({ row }) => (
+    <Checkbox
+      checked={row.getIsSelected()}
+      onCheckedChange={(value) => row.toggleSelected(!!value)}
+    />
+  ),
+}
+```
+
+#### Action Columns
+```typescript
+{
+  id: 'actions',
+  header: () => null,  // No header for action columns
+  cell: ({ row }) => (
+    <DropdownMenu>
+      {/* Action menu items */}
+    </DropdownMenu>
+  ),
+}
+```
+
+### Why Use DataTableHeader for All Regular Columns?
+
+1. **Consistent Styling**: All column headers get the same `font-medium` styling
+2. **Future-Proof**: Easy to toggle sorting on/off by adding/removing the `sortable` prop
+3. **Single Pattern**: Developers only need to remember one pattern for data columns
+4. **Accessibility**: Built-in keyboard navigation and ARIA attributes
+
+### Common Mistakes to Avoid
+
+```typescript
+// ❌ WRONG - Plain string header for data column
+{
+  accessorKey: 'description',
+  header: 'Description',  // Missing DataTableHeader
+  cell: ({ row }) => row.original.description,
+}
+
+// ❌ WRONG - Missing enableSorting property
+{
+  accessorKey: 'name',
+  header: ({ column }) => (
+    <DataTableHeader column={column} sortable>
+      Name
+    </DataTableHeader>
+  ),
+  // Missing: enableSorting: true
+}
+
+// ✅ CORRECT - Proper implementation
+{
+  accessorKey: 'description',
+  header: ({ column }) => (
+    <DataTableHeader column={column}>
+      Description
+    </DataTableHeader>
+  ),
+  enableSorting: false,
+  cell: ({ row }) => row.original.description,
 }
 ```
 

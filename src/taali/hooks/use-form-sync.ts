@@ -23,22 +23,24 @@ export function useFormSync<T extends FieldValues>(
   dependencies: React.DependencyList = []
 ) {
   const previousDataRef = useRef<T | null | undefined>(undefined)
-  
+
   useEffect(() => {
+    console.log('data', data, 'previousDataRef.current', previousDataRef.current) // Debug log
     // Skip if data hasn't changed
     if (data === previousDataRef.current) {
       return
     }
-    
+
     // Skip if data is null/undefined (still loading)
     if (!data) {
       return
     }
-    
+
     // Deep comparison to avoid unnecessary resets
     const dataChanged = JSON.stringify(data) !== JSON.stringify(previousDataRef.current)
-    
+
     if (dataChanged) {
+      console.log("setting form data", data) // Debug log
       form.reset(data)
       previousDataRef.current = data
     }
@@ -61,15 +63,15 @@ export function useFormSyncWithStatus<T extends FieldValues>(
 ) {
   const isSyncedRef = useRef<boolean>(false)
   const previousDataRef = useRef<T | null | undefined>(undefined)
-  
+
   useEffect(() => {
     if (!data) {
       isSyncedRef.current = false
       return
     }
-    
+
     const dataChanged = JSON.stringify(data) !== JSON.stringify(previousDataRef.current)
-    
+
     if (dataChanged) {
       form.reset(data)
       previousDataRef.current = data
@@ -77,7 +79,7 @@ export function useFormSyncWithStatus<T extends FieldValues>(
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps -- dependencies are passed as spread parameter
   }, [data, form, ...dependencies])
-  
+
   return {
     isSynced: isSyncedRef.current,
     isLoading: !data,

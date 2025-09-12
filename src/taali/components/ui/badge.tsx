@@ -236,7 +236,7 @@ function Badge({
     >
       {startImage && <img src={startImage} alt="" className="size-4 rounded-full object-cover" />}
       {startIcon}
-      {status && <div className="size-2 rounded-full bg-current" />}
+      {status && <div className="size-1.5 rounded-full bg-current" />}
       {children}
       {endIcon}
       {endImage && <img src={endImage} alt="" className="size-4 rounded-full object-cover" />}
