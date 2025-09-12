@@ -747,7 +747,12 @@ function AdminUsersPage() {
   const columns: ColumnDef<AdminUser>[] = [
     {
       accessorKey: 'name',
-      header: 'Name',
+      header: ({ column }) => (
+        <DataTableHeader column={column} sortable>
+          Name
+        </DataTableHeader>
+      ),
+      enableSorting: true,
       meta: {
         filterConfig: {
           type: 'text',
@@ -757,7 +762,12 @@ function AdminUsersPage() {
     },
     {
       accessorKey: 'email',
-      header: 'Email',
+      header: ({ column }) => (
+        <DataTableHeader column={column} sortable>
+          Email
+        </DataTableHeader>
+      ),
+      enableSorting: true,
       meta: {
         filterConfig: {
           type: 'text',
@@ -767,7 +777,12 @@ function AdminUsersPage() {
     },
     {
       accessorKey: 'role',
-      header: 'Role',
+      header: ({ column }) => (
+        <DataTableHeader column={column} sortable>
+          Role
+        </DataTableHeader>
+      ),
+      enableSorting: true,
       cell: ({ row }) => (
         <Badge variant={
           row.original.role === 'superadmin' ? 'destructive' :
