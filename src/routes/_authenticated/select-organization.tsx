@@ -25,6 +25,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/ui/
 export const Route = createFileRoute('/_authenticated/select-organization')({
   staticData: {
     sidebar: false,
+    skipOrgCheck: true,  // Skip org check since this IS the org selection page
   },
   component: SelectOrganizationPage,
 })

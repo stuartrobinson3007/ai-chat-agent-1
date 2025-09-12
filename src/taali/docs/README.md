@@ -292,6 +292,12 @@ Client-side state updates happen immediately with server reconciliation for bett
 ### 5. Error-First Design
 Comprehensive error handling with user-friendly messages and proper fallback states.
 
+### 6. Route Metadata Patterns
+Authentication and layout behavior controlled through TanStack Router `staticData`:
+- Type-safe route configuration eliminates hardcoded path arrays
+- Inheritance model works correctly with nested routes
+- Single source of truth per route for authentication behavior
+
 ## 📖 Documentation Structure
 
 This overview is part of a comprehensive documentation system covering **all architectural components**:

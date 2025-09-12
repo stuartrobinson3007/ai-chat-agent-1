@@ -12,6 +12,7 @@ const searchSchema = z.object({
 export const Route = createFileRoute('/_authenticated/onboarding')({
   staticData: {
     sidebar: false,
+    skipOrgCheck: true,  // Skip org check since user is still onboarding
   },
   validateSearch: searchSchema,
   loader: async ({ location }) => {

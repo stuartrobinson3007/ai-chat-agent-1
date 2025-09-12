@@ -714,4 +714,40 @@ export const getTeamMembersTable = createServerFn({ method: 'POST' })
   })
 ```
 
+## Route-Based Authentication Control
+
+### Organization Check Bypass
+Routes can opt out of organization selection requirements using metadata:
+
+```typescript
+// Routes that should skip organization checks
+export const Route = createFileRoute('/_authenticated/onboarding')({
+  staticData: {
+    skipOrgCheck: true,  // Skip during onboarding flow
+  }
+})
+
+export const Route = createFileRoute('/_authenticated/superadmin')({
+  staticData: {
+    skipOrgCheck: true,  // Superadmin transcends organizations
+  }
+})
+```
+
+### Implementation in _authenticated Layout
+```typescript
+// Check all matched routes for skipOrgCheck flag
+const shouldSkipOrgCheck = matches.some(match => match.staticData?.skipOrgCheck === true)
+
+if (!shouldSkipOrgCheck && session.user.onboardingCompleted) {
+  // Perform organization validation
+}
+```
+
+### When to Use skipOrgCheck
+- **Onboarding flows**: Users haven't selected an organization yet
+- **Organization selection**: This IS the org selection page  
+- **Super admin routes**: Admin functionality that transcends organizations
+- **System-level pages**: Routes that don't require organization context
+
 This authentication system provides enterprise-grade security with fine-grained permissions, multi-provider support, and seamless integration with the organization-based multi-tenancy system.

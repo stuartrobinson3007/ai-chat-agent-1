@@ -64,9 +64,9 @@ function AuthenticatedLayout() {
       }
 
       // Check if user needs to select an organization
-      // Skip this check for certain pages
-      const skipOrgCheckPaths = ['/onboarding', '/select-organization', '/superadmin']
-      const shouldSkipOrgCheck = skipOrgCheckPaths.some(path => currentPath.startsWith(path))
+      // Routes can opt-out of org check via staticData.skipOrgCheck
+      // Check all matched routes in the hierarchy (for nested routes like /superadmin/users)
+      const shouldSkipOrgCheck = matches.some(match => match.staticData?.skipOrgCheck === true)
       
       if (!shouldSkipOrgCheck && session.user.onboardingCompleted) {
         const activeOrgId = getActiveOrganizationId()
