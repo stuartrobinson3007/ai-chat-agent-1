@@ -60,6 +60,9 @@ export function handleErrorAction(action: ErrorAction) {
     case 'login':
       window.location.href = '/auth/signin'
       break
+    case 'updateConnection':
+      window.location.href = '/auth/update-connection'
+      break
     case 'upgrade':
       window.location.href = '/billing'
       break

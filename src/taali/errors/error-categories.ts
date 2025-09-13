@@ -22,6 +22,10 @@ const ERROR_CATEGORIES = {
     ERROR_CODES.SYS_SERVER_ERROR,
     ERROR_CODES.SYS_CONFIG_ERROR,
     ERROR_CODES.SYS_RATE_LIMIT,
+    ERROR_CODES.SYS_TOKEN_REFRESH_FAILED,
+    ERROR_CODES.SYS_TOKEN_INVALID,
+    ERROR_CODES.SYS_TOKEN_PERSISTENCE_FAILED,
+    ERROR_CODES.SYS_INTERNAL_ERROR,
     ERROR_CODES.NET_CONNECTION_ERROR,
     ERROR_CODES.NET_TIMEOUT,
     ERROR_CODES.AUTH_SESSION_EXPIRED,
@@ -52,7 +56,8 @@ export function isRetryableError(code: string): boolean {
   const retryableCodes = new Set<ErrorCode>([
     ERROR_CODES.NET_CONNECTION_ERROR,
     ERROR_CODES.NET_TIMEOUT,
-    ERROR_CODES.SYS_RATE_LIMIT
+    ERROR_CODES.SYS_RATE_LIMIT,
+    ERROR_CODES.SYS_TOKEN_PERSISTENCE_FAILED
   ])
   
   return retryableCodes.has(code as ErrorCode)
@@ -67,12 +72,17 @@ export function getErrorAction(code: string): { action: string; label: string } 
     case ERROR_CODES.AUTH_NOT_AUTHENTICATED:
       return { action: 'login', label: 'Sign In' }
       
+    case ERROR_CODES.SYS_TOKEN_REFRESH_FAILED:
+    case ERROR_CODES.SYS_TOKEN_INVALID:
+      return { action: 'updateConnection', label: 'Update Connection' }
+      
     case ERROR_CODES.BIZ_LIMIT_EXCEEDED:
     case ERROR_CODES.BIZ_PAYMENT_FAILED:
       return { action: 'upgrade', label: 'Upgrade Plan' }
       
     case ERROR_CODES.NET_CONNECTION_ERROR:
     case ERROR_CODES.NET_TIMEOUT:
+    case ERROR_CODES.SYS_TOKEN_PERSISTENCE_FAILED:
       return { action: 'retry', label: 'Try Again' }
       
     default:
