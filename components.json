@@ -13,7 +13,7 @@
   "iconLibrary": "lucide",
   "aliases": {
     "components": "@/components/taali-ui/components",
-    "utils": "@/components/taali-ui/lib/utils",
+    "utils": "@/taali/lib/utils",
     "ui": "@/components/taali-ui/ui-temp",
     "lib": "@/components/taali-ui/lib",
     "hooks": "@/components/taali-ui/hooks"

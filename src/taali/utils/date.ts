@@ -216,7 +216,7 @@ export function to24HourTime(time12h: string): string {
   const match = time12h.trim().match(/^(\d{1,2}):(\d{2})\s*(am|pm)$/i)
   if (!match) throw new Error(`Invalid time format: ${time12h}`)
   
-  let [_, hours, minutes, period] = match
+  const [, hours, minutes, period] = match
   let hour = parseInt(hours)
   
   // Handle noon and midnight edge cases

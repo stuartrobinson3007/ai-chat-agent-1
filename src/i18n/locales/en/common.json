@@ -182,8 +182,8 @@
     "selectAllItems": "Select all {{total}} items"
   },
   "app": {
-    "title": "TanStack Todo App",
-    "name": "Todo App",
+    "title": "Jevora",
+    "name": "Jevora",
     "notFound": "The page you're looking for doesn't exist.",
     "backHome": "Back to Home"
   },

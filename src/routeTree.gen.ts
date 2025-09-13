@@ -21,12 +21,14 @@ import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedSelectOrganizationRouteImport } from './routes/_authenticated/select-organization'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
+import { Route as AuthenticatedChatDemoRouteImport } from './routes/_authenticated/chat-demo'
 import { Route as AuthenticatedBillingRouteImport } from './routes/_authenticated/billing'
 import { Route as AuthenticatedSuperadminIndexRouteImport } from './routes/_authenticated/superadmin/index'
 import { Route as AuthenticatedSuperadminWorkspacesRouteImport } from './routes/_authenticated/superadmin/workspaces'
 import { Route as AuthenticatedSuperadminUsersRouteImport } from './routes/_authenticated/superadmin/users'
 import { Route as AuthenticatedTodosIdEditRouteImport } from './routes/_authenticated/todos.$id.edit'
 import { ServerRoute as ApiHealthServerRouteImport } from './routes/api/health'
+import { ServerRoute as ApiChatServerRouteImport } from './routes/api/chat'
 import { ServerRoute as ApiStripeWebhookServerRouteImport } from './routes/api/stripe/webhook'
 import { ServerRoute as ApiAvatarsUploadServerRouteImport } from './routes/api/avatars/upload'
 import { ServerRoute as ApiAvatarsDeleteServerRouteImport } from './routes/api/avatars/delete'
@@ -85,6 +87,11 @@ const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
   path: '/onboarding',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedChatDemoRoute = AuthenticatedChatDemoRouteImport.update({
+  id: '/chat-demo',
+  path: '/chat-demo',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedBillingRoute = AuthenticatedBillingRouteImport.update({
   id: '/billing',
   path: '/billing',
@@ -119,6 +126,11 @@ const ApiHealthServerRoute = ApiHealthServerRouteImport.update({
   path: '/api/health',
   getParentRoute: () => rootServerRouteImport,
 } as any)
+const ApiChatServerRoute = ApiChatServerRouteImport.update({
+  id: '/api/chat',
+  path: '/api/chat',
+  getParentRoute: () => rootServerRouteImport,
+} as any)
 const ApiStripeWebhookServerRoute = ApiStripeWebhookServerRouteImport.update({
   id: '/api/stripe/webhook',
   path: '/api/stripe/webhook',
@@ -147,6 +159,7 @@ const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/billing': typeof AuthenticatedBillingRoute
+  '/chat-demo': typeof AuthenticatedChatDemoRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/select-organization': typeof AuthenticatedSelectOrganizationRoute
@@ -163,6 +176,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/billing': typeof AuthenticatedBillingRoute
+  '/chat-demo': typeof AuthenticatedChatDemoRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/select-organization': typeof AuthenticatedSelectOrganizationRoute
@@ -180,6 +194,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_authenticated/billing': typeof AuthenticatedBillingRoute
+  '/_authenticated/chat-demo': typeof AuthenticatedChatDemoRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/select-organization': typeof AuthenticatedSelectOrganizationRoute
@@ -198,6 +213,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/billing'
+    | '/chat-demo'
     | '/onboarding'
     | '/profile'
     | '/select-organization'
@@ -214,6 +230,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/billing'
+    | '/chat-demo'
     | '/onboarding'
     | '/profile'
     | '/select-organization'
@@ -230,6 +247,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/_authenticated'
     | '/_authenticated/billing'
+    | '/_authenticated/chat-demo'
     | '/_authenticated/onboarding'
     | '/_authenticated/profile'
     | '/_authenticated/select-organization'
@@ -251,6 +269,7 @@ export interface RootRouteChildren {
   InviteInvitationIdRoute: typeof InviteInvitationIdRoute
 }
 export interface FileServerRoutesByFullPath {
+  '/api/chat': typeof ApiChatServerRoute
   '/api/health': typeof ApiHealthServerRoute
   '/api/auth/$': typeof ApiAuthSplatServerRoute
   '/api/avatars/$': typeof ApiAvatarsSplatServerRoute
@@ -259,6 +278,7 @@ export interface FileServerRoutesByFullPath {
   '/api/stripe/webhook': typeof ApiStripeWebhookServerRoute
 }
 export interface FileServerRoutesByTo {
+  '/api/chat': typeof ApiChatServerRoute
   '/api/health': typeof ApiHealthServerRoute
   '/api/auth/$': typeof ApiAuthSplatServerRoute
   '/api/avatars/$': typeof ApiAvatarsSplatServerRoute
@@ -268,6 +288,7 @@ export interface FileServerRoutesByTo {
 }
 export interface FileServerRoutesById {
   __root__: typeof rootServerRouteImport
+  '/api/chat': typeof ApiChatServerRoute
   '/api/health': typeof ApiHealthServerRoute
   '/api/auth/$': typeof ApiAuthSplatServerRoute
   '/api/avatars/$': typeof ApiAvatarsSplatServerRoute
@@ -278,6 +299,7 @@ export interface FileServerRoutesById {
 export interface FileServerRouteTypes {
   fileServerRoutesByFullPath: FileServerRoutesByFullPath
   fullPaths:
+    | '/api/chat'
     | '/api/health'
     | '/api/auth/$'
     | '/api/avatars/$'
@@ -286,6 +308,7 @@ export interface FileServerRouteTypes {
     | '/api/stripe/webhook'
   fileServerRoutesByTo: FileServerRoutesByTo
   to:
+    | '/api/chat'
     | '/api/health'
     | '/api/auth/$'
     | '/api/avatars/$'
@@ -294,6 +317,7 @@ export interface FileServerRouteTypes {
     | '/api/stripe/webhook'
   id:
     | '__root__'
+    | '/api/chat'
     | '/api/health'
     | '/api/auth/$'
     | '/api/avatars/$'
@@ -303,6 +327,7 @@ export interface FileServerRouteTypes {
   fileServerRoutesById: FileServerRoutesById
 }
 export interface RootServerRouteChildren {
+  ApiChatServerRoute: typeof ApiChatServerRoute
   ApiHealthServerRoute: typeof ApiHealthServerRoute
   ApiAuthSplatServerRoute: typeof ApiAuthSplatServerRoute
   ApiAvatarsSplatServerRoute: typeof ApiAvatarsSplatServerRoute
@@ -383,6 +408,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOnboardingRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/chat-demo': {
+      id: '/_authenticated/chat-demo'
+      path: '/chat-demo'
+      fullPath: '/chat-demo'
+      preLoaderRoute: typeof AuthenticatedChatDemoRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/billing': {
       id: '/_authenticated/billing'
       path: '/billing'
@@ -427,6 +459,13 @@ declare module '@tanstack/react-start/server' {
       path: '/api/health'
       fullPath: '/api/health'
       preLoaderRoute: typeof ApiHealthServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
+    '/api/chat': {
+      id: '/api/chat'
+      path: '/api/chat'
+      fullPath: '/api/chat'
+      preLoaderRoute: typeof ApiChatServerRouteImport
       parentRoute: typeof rootServerRouteImport
     }
     '/api/stripe/webhook': {
@@ -488,6 +527,7 @@ const AuthenticatedSuperadminRouteWithChildren =
 
 interface AuthenticatedRouteChildren {
   AuthenticatedBillingRoute: typeof AuthenticatedBillingRoute
+  AuthenticatedChatDemoRoute: typeof AuthenticatedChatDemoRoute
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedSelectOrganizationRoute: typeof AuthenticatedSelectOrganizationRoute
@@ -500,6 +540,7 @@ interface AuthenticatedRouteChildren {
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedBillingRoute: AuthenticatedBillingRoute,
+  AuthenticatedChatDemoRoute: AuthenticatedChatDemoRoute,
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedSelectOrganizationRoute: AuthenticatedSelectOrganizationRoute,
@@ -523,6 +564,7 @@ export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 const rootServerRouteChildren: RootServerRouteChildren = {
+  ApiChatServerRoute: ApiChatServerRoute,
   ApiHealthServerRoute: ApiHealthServerRoute,
   ApiAuthSplatServerRoute: ApiAuthSplatServerRoute,
   ApiAvatarsSplatServerRoute: ApiAvatarsSplatServerRoute,

@@ -21,7 +21,7 @@ export const Route = createRootRoute({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: process.env.NODE_ENV === 'production' ? 'Todo App' : 'TanStack Todo App',
+        title: 'Jevora',
       },
     ],
     links: [

@@ -113,12 +113,7 @@ export const getSubscription = createServerFn({ method: 'GET' })
           allSubscriptions[0] // Use first subscription even if past_due/incomplete
 
       }
-    } catch (error) {
-      console.error('[getSubscription] Error fetching subscriptions from BetterAuth', {
-        orgId,
-        error,
-        timestamp: new Date().toISOString()
-      })
+    } catch {
       // Continue without subscription data rather than failing entirely
       // Subscription data is optional for basic functionality
     }
@@ -166,8 +161,8 @@ export const createCheckout = createServerFn({ method: 'POST' })
       const result = await auth.api.upgradeSubscription({
         body: {
           plan,
-          successUrl: `${process.env.BETTER_AUTH_URL || 'http://localhost:2847'}/billing?success=true`,
-          cancelUrl: `${process.env.BETTER_AUTH_URL || 'http://localhost:2847'}/billing`,
+          successUrl: `${process.env.BETTER_AUTH_URL}/billing?success=true`,
+          cancelUrl: `${process.env.BETTER_AUTH_URL}/billing`,
           annual: interval === 'annual',
           referenceId: orgId,
         },

@@ -3,13 +3,13 @@ version: '3.8'
 services:
   postgres:
     image: postgres:17
-    container_name: tanstack-todo-postgres
+    container_name: jevora-postgres
     environment:
-      POSTGRES_DB: tanstack_todo_dev
+      POSTGRES_DB: jevora_dev
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: dev
     ports:
-      - "8472:5432"
+      - "${POSTGRES_EXTERNAL_PORT}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -20,9 +20,9 @@ services:
 
   redis:
     image: redis:8-alpine
-    container_name: tanstack-todo-redis
+    container_name: jevora-redis
     ports:
-      - "3591:6379"
+      - "${REDIS_EXTERNAL_PORT}:6379"
     volumes:
       - redis_data:/data
     healthcheck:

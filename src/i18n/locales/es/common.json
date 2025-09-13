@@ -183,8 +183,8 @@
     "selectAllItems": "Seleccionar todos los {{total}} elementos"
   },
   "app": {
-    "title": "App de Tareas TanStack",
-    "name": "App de Tareas",
+    "title": "Jevora",
+    "name": "Jevora",
     "notFound": "La página que buscas no existe.",
     "backHome": "Volver al Inicio"
   },

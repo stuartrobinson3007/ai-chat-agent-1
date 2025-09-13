@@ -78,7 +78,7 @@ function AuthenticatedLayout() {
         }
       }
     }
-  }, [session, organizations, sessionPending, orgsPending, navigate, currentPath])
+  }, [session, organizations, sessionPending, orgsPending, navigate, currentPath, matches])
 
   // End impersonation when navigating to superadmin routes
   useEffect(() => {

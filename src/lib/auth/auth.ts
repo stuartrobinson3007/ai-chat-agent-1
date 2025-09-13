@@ -156,8 +156,8 @@ const getAuthConfig = serverOnly(() =>
             },
           }
         },
-        successUrl: `${process.env.BETTER_AUTH_URL || 'http://localhost:2847'}/billing?success=true`,
-        cancelUrl: `${process.env.BETTER_AUTH_URL || 'http://localhost:2847'}/billing`,
+        successUrl: `${process.env.BETTER_AUTH_URL}/billing?success=true`,
+        cancelUrl: `${process.env.BETTER_AUTH_URL}/billing`,
         subscription: {
           enabled: true,
           // Add metadata to Stripe checkout sessions and subscriptions

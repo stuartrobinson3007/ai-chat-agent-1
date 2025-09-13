@@ -1,7 +1,7 @@
 import React from 'react';
 import { format } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
-import { cn } from '@/taali/lib/utils';
+
 import { Button } from './button';
 import { Calendar } from './calendar';
 import {
@@ -9,6 +9,8 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from './popover';
+
+import { cn } from '@/taali/lib/utils';
 
 interface DatePickerProps {
     date: Date | undefined;

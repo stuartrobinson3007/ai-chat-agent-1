@@ -6,6 +6,9 @@ import tailwindcss from '@tailwindcss/vite'
 import { resolve } from 'path'
 
 const config = defineConfig({
+  server: {
+    port: parseInt(process.env.VITE_PORT || '5990'),
+  },
   plugins: [
     // this is the plugin that enables path aliases
     viteTsConfigPaths({

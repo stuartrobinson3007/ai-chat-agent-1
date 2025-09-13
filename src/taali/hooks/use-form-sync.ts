@@ -25,7 +25,6 @@ export function useFormSync<T extends FieldValues>(
   const previousDataRef = useRef<T | null | undefined>(undefined)
 
   useEffect(() => {
-    console.log('data', data, 'previousDataRef.current', previousDataRef.current) // Debug log
     // Skip if data hasn't changed
     if (data === previousDataRef.current) {
       return
@@ -40,7 +39,6 @@ export function useFormSync<T extends FieldValues>(
     const dataChanged = JSON.stringify(data) !== JSON.stringify(previousDataRef.current)
 
     if (dataChanged) {
-      console.log("setting form data", data) // Debug log
       form.reset(data)
       previousDataRef.current = data
     }

@@ -1,7 +1,9 @@
 import { useState, useRef, useEffect, forwardRef } from "react";
 import { HexColorPicker } from "react-colorful";
+
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 import { Input } from "./input";
+
 import { cn } from "@/taali/lib/utils";
 
 // Default preset colors

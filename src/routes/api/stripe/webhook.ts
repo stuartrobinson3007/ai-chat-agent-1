@@ -14,13 +14,7 @@ export const ServerRoute = createServerFileRoute('/api/stripe/webhook').methods(
       const body = await request.text()
       
       // Parse to check what we're dealing with
-      let event: any
-      try {
-        event = JSON.parse(body)
-      } catch (parseError) {
-        console.error('[WEBHOOK] Failed to parse body as JSON:', parseError)
-        throw parseError
-      }
+      const event: { type: string; data: { object: any }; [key: string]: unknown } = JSON.parse(body)
       
       // Create a new request with the body for Better Auth to process
       const clonedRequest = new Request(request.url, {
@@ -35,8 +29,7 @@ export const ServerRoute = createServerFileRoute('/api/stripe/webhook').methods(
           request: clonedRequest,
           headers: request.headers,
         })
-      } catch (authError) {
-        console.error('[WEBHOOK] Better Auth webhook processing failed:', authError)
+      } catch {
         // Don't throw - continue with our own processing
       }
       
@@ -47,18 +40,13 @@ export const ServerRoute = createServerFileRoute('/api/stripe/webhook').methods(
           const orgId = customer.metadata?.organizationId
           
           if (orgId && customer.id) {
-            try {
-              await db
-                .update(organization)
-                .set({
-                  stripeCustomerId: customer.id,
-                  updatedAt: new Date(),
-                })
-                .where(eq(organization.id, orgId))
-            } catch (dbError) {
-              console.error(`[WEBHOOK] Failed to update organization ${orgId}:`, dbError)
-              throw dbError
-            }
+            await db
+              .update(organization)
+              .set({
+                stripeCustomerId: customer.id,
+                updatedAt: new Date(),
+              })
+              .where(eq(organization.id, orgId))
           }
           break
         }
@@ -92,25 +80,20 @@ export const ServerRoute = createServerFileRoute('/api/stripe/webhook').methods(
               // Extract Stripe customer ID from subscription
               const stripeCustomerId = subscription.customer
               
-              try {
-                const updateData: any = {
-                  currentPlan: planName,
-                  updatedAt: new Date(),
-                }
-                
-                // Also update stripeCustomerId if available
-                if (stripeCustomerId && typeof stripeCustomerId === 'string') {
-                  updateData.stripeCustomerId = stripeCustomerId
-                }
-                
-                await db
-                  .update(organization)
-                  .set(updateData)
-                  .where(eq(organization.id, orgId))
-              } catch (dbError) {
-                console.error(`[WEBHOOK] Failed to update organization ${orgId} plan:`, dbError)
-                throw dbError
+              const updateData: { currentPlan: string; updatedAt: Date; stripeCustomerId?: string } = {
+                currentPlan: planName,
+                updatedAt: new Date(),
               }
+              
+              // Also update stripeCustomerId if available
+              if (stripeCustomerId && typeof stripeCustomerId === 'string') {
+                updateData.stripeCustomerId = stripeCustomerId
+              }
+              
+              await db
+                .update(organization)
+                .set(updateData)
+                .where(eq(organization.id, orgId))
             }
           }
           break
@@ -121,18 +104,13 @@ export const ServerRoute = createServerFileRoute('/api/stripe/webhook').methods(
           const orgId = subscription.metadata?.organizationId
           
           if (orgId) {
-            try {
-              await db
-                .update(organization)
-                .set({
-                  currentPlan: 'free',
-                  updatedAt: new Date(),
-                })
-                .where(eq(organization.id, orgId))
-            } catch (dbError) {
-              console.error(`[WEBHOOK] Failed to downgrade organization ${orgId}:`, dbError)
-              throw dbError
-            }
+            await db
+              .update(organization)
+              .set({
+                currentPlan: 'free',
+                updatedAt: new Date(),
+              })
+              .where(eq(organization.id, orgId))
           }
           break
         }
@@ -141,8 +119,6 @@ export const ServerRoute = createServerFileRoute('/api/stripe/webhook').methods(
       return new Response('OK', { status: 200 })
     } catch (error) {
       // Error could be from Better Auth signature validation or our processing
-      console.error('[WEBHOOK] Error processing webhook:', error)
-      console.error('[WEBHOOK] Error stack:', error instanceof Error ? error.stack : 'No stack trace')
       
       return new Response(
         `Webhook processing failed: ${error instanceof Error ? error.message : 'Unknown error'}`, 
