@@ -7,7 +7,7 @@ export interface ErrorContext {
 }
 
 export interface ErrorAction {
-  action: 'retry' | 'login' | 'upgrade' | 'support' | 'goBack'
+  action: 'retry' | 'login' | 'upgrade' | 'support' | 'goBack' | 'updateConnection'
   label?: string
   data?: unknown
 }

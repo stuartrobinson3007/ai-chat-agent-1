@@ -96,6 +96,31 @@ declare module '@tanstack/react-router' {
 }
 ```
 
+#### **Route Configuration & Metadata**
+
+**Static Data Options**
+All routes can define metadata via `staticData` to control layout and authentication behavior:
+
+```typescript
+export const Route = createFileRoute('/example')({
+  staticData: {
+    sidebar: boolean,      // Show/hide sidebar (default: true)
+    skipOrgCheck: boolean  // Skip organization selection check (default: false)
+  },
+  component: ExamplePage,
+})
+```
+
+**Authentication Flow Integration**
+The `_authenticated` layout uses route metadata to determine authentication behavior:
+- Routes with `skipOrgCheck: true` bypass organization selection requirements
+- Nested routes inherit parent route metadata for consistent behavior
+- Uses `matches.some(match => match.staticData?.skipOrgCheck === true)` for checking
+
+**Common Use Cases:**
+- `skipOrgCheck: true` for onboarding, organization selection, and super admin routes
+- `sidebar: false` for full-screen pages like auth forms and onboarding
+
 #### 3. **TypeScript Configuration**
 ```json
 // tsconfig.json
