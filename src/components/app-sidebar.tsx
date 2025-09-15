@@ -4,7 +4,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter, useRouterState, Link } from '@tanstack/react-router'
-import { CheckSquare, Users, Settings, CreditCard } from 'lucide-react'
+import { Bot, Users, Settings, CreditCard, Link as LinkIcon } from 'lucide-react'
 
 import { useTranslation } from '@/i18n/hooks/useTranslation'
 import {
@@ -96,10 +96,16 @@ export function AppSidebar() {
   // Define navigation items with proper hook-based translations
   const navigationItems = [
     {
-      title: t('navigation.todos'),
+      title: 'Agents',
       url: '/',
-      icon: CheckSquare,
+      icon: Bot,
       requiresPermission: null, // Everyone can access
+    },
+    {
+      title: 'Connections',
+      url: '/connections',
+      icon: LinkIcon,
+      requiresPermission: 'admin', // Only admins can manage connections
     },
     {
       title: t('navigation.team'),
@@ -121,6 +127,7 @@ export function AppSidebar() {
     },
   ].filter(item => {
     if (!item.requiresPermission) return true
+    if (item.requiresPermission === 'admin') return hasAdminPermission(memberRole)
 
     // Billing and Settings require admin or owner role
     return hasAdminPermission(memberRole)

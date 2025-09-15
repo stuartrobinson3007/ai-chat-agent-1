@@ -19,7 +19,7 @@ export function GoogleSignIn() {
   }
 
   return (
-    <Button onClick={handleSignIn} className="w-full">
+    <Button onClick={handleSignIn} className="w-full" variant="outline">
       <svg viewBox="0 0 24 24">
         <path
           fill="#4285f4"

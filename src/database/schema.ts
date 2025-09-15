@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, boolean, integer } from 'drizzle-orm/pg-core'
+import { pgTable, text, timestamp, boolean, integer, jsonb, vector } from 'drizzle-orm/pg-core'
 import { nanoid } from 'nanoid'
 
 export const user = pgTable('user', {
@@ -129,3 +129,97 @@ export const todos = pgTable('todos', {
   createdAt: timestamp('created_at').defaultNow().notNull(),
   updatedAt: timestamp('updated_at').defaultNow().notNull(),
 })
+
+// RAG Documents (metadata only, files stored in filesystem)
+export const documents = pgTable('documents', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => nanoid()),
+  title: text('title').notNull(),
+  filePath: text('file_path').notNull(), // Path to file in storage
+  contentType: text('content_type').notNull(), // e.g., 'application/pdf', 'text/plain'
+  fileSize: integer('file_size').notNull(), // File size in bytes
+  organizationId: text('organization_id')
+    .references(() => organization.id, { onDelete: 'cascade' })
+    .notNull(),
+  createdBy: text('created_by')
+    .references(() => user.id, { onDelete: 'cascade' })
+    .notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+})
+
+// RAG Document Chunks - REMOVED: Using Mastra vector system instead
+
+// Agents table
+export const agents = pgTable('agents', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => nanoid()),
+  organizationId: text('organization_id')
+    .references(() => organization.id, { onDelete: 'cascade' })
+    .notNull(),
+  name: text('name').notNull(),
+  instructions: text('instructions').notNull(),
+  selectedTools: text('selected_tools').array().notNull().$default(() => []),
+  createdBy: text('created_by')
+    .references(() => user.id, { onDelete: 'cascade' })
+    .notNull(),
+  isActive: boolean('is_active').default(true).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+})
+
+// Link agents to documents for knowledge base
+export const agentDocuments = pgTable('agent_documents', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => nanoid()),
+  agentId: text('agent_id')
+    .references(() => agents.id, { onDelete: 'cascade' })
+    .notNull(),
+  documentId: text('document_id')
+    .references(() => documents.id, { onDelete: 'cascade' })
+    .notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+})
+
+// Tool connections (OAuth tokens for external services)
+export const toolConnections = pgTable('tool_connections', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => nanoid()),
+  organizationId: text('organization_id')
+    .references(() => organization.id, { onDelete: 'cascade' })
+    .notNull(),
+  provider: text('provider').notNull(), // 'google_calendar', 'hubspot'
+  displayName: text('display_name').notNull(), // User-defined name like "CEO Calendar"
+  description: text('description'), // Optional user description
+  accountEmail: text('account_email'), // For display (e.g., sales@company.com)
+  accessToken: text('access_token'), // Encrypted with AES-256
+  refreshToken: text('refresh_token'), // Encrypted with AES-256
+  expiresAt: timestamp('expires_at'),
+  scopes: text('scopes').array(), // OAuth scopes granted
+  metadata: jsonb('metadata'), // Provider-specific data
+  connectedBy: text('connected_by')
+    .references(() => user.id, { onDelete: 'cascade' }),
+  isActive: boolean('is_active').default(true).notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
+})
+
+// Link agents to specific connections (not just providers)
+export const agentConnections = pgTable('agent_connections', {
+  id: text('id')
+    .primaryKey()
+    .$defaultFn(() => nanoid()),
+  agentId: text('agent_id')
+    .references(() => agents.id, { onDelete: 'cascade' })
+    .notNull(),
+  connectionId: text('connection_id')
+    .references(() => toolConnections.id, { onDelete: 'cascade' })
+    .notNull(),
+  toolAlias: text('tool_alias').notNull(), // "ceo_calendar", "sales_crm"
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+})
+

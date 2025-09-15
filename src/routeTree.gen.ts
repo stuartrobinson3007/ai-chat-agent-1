@@ -21,12 +21,17 @@ import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedSelectOrganizationRouteImport } from './routes/_authenticated/select-organization'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
+import { Route as AuthenticatedConnectionsRouteImport } from './routes/_authenticated/connections'
 import { Route as AuthenticatedChatDemoRouteImport } from './routes/_authenticated/chat-demo'
 import { Route as AuthenticatedBillingRouteImport } from './routes/_authenticated/billing'
 import { Route as AuthenticatedSuperadminIndexRouteImport } from './routes/_authenticated/superadmin/index'
 import { Route as AuthenticatedSuperadminWorkspacesRouteImport } from './routes/_authenticated/superadmin/workspaces'
 import { Route as AuthenticatedSuperadminUsersRouteImport } from './routes/_authenticated/superadmin/users'
+import { Route as AuthenticatedAgentsNewRouteImport } from './routes/_authenticated/agents.new'
 import { Route as AuthenticatedTodosIdEditRouteImport } from './routes/_authenticated/todos.$id.edit'
+import { Route as AuthenticatedAgentsAgentIdEditRouteImport } from './routes/_authenticated/agents.$agentId.edit'
+import { Route as AuthenticatedAgentsAgentIdChatRouteImport } from './routes/_authenticated/agents.$agentId.chat'
+import { ServerRoute as ApiProcessDocumentServerRouteImport } from './routes/api/process-document'
 import { ServerRoute as ApiHealthServerRouteImport } from './routes/api/health'
 import { ServerRoute as ApiChatServerRouteImport } from './routes/api/chat'
 import { ServerRoute as ApiStripeWebhookServerRouteImport } from './routes/api/stripe/webhook'
@@ -34,6 +39,11 @@ import { ServerRoute as ApiAvatarsUploadServerRouteImport } from './routes/api/a
 import { ServerRoute as ApiAvatarsDeleteServerRouteImport } from './routes/api/avatars/delete'
 import { ServerRoute as ApiAvatarsSplatServerRouteImport } from './routes/api/avatars/$'
 import { ServerRoute as ApiAuthSplatServerRouteImport } from './routes/api/auth/$'
+import { ServerRoute as ApiToolsHubspotCompleteServerRouteImport } from './routes/api/tools.hubspot.complete'
+import { ServerRoute as ApiToolsHubspotCallbackServerRouteImport } from './routes/api/tools.hubspot.callback'
+import { ServerRoute as ApiToolsGoogleCompleteServerRouteImport } from './routes/api/tools.google.complete'
+import { ServerRoute as ApiToolsGoogleCallbackServerRouteImport } from './routes/api/tools.google.callback'
+import { ServerRoute as ApiAgentsAgentIdChatServerRouteImport } from './routes/api/agents.$agentId.chat'
 
 const rootServerRouteImport = createServerRootRoute()
 
@@ -87,6 +97,12 @@ const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
   path: '/onboarding',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedConnectionsRoute =
+  AuthenticatedConnectionsRouteImport.update({
+    id: '/connections',
+    path: '/connections',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedChatDemoRoute = AuthenticatedChatDemoRouteImport.update({
   id: '/chat-demo',
   path: '/chat-demo',
@@ -115,11 +131,34 @@ const AuthenticatedSuperadminUsersRoute =
     path: '/users',
     getParentRoute: () => AuthenticatedSuperadminRoute,
   } as any)
+const AuthenticatedAgentsNewRoute = AuthenticatedAgentsNewRouteImport.update({
+  id: '/agents/new',
+  path: '/agents/new',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedTodosIdEditRoute =
   AuthenticatedTodosIdEditRouteImport.update({
     id: '/todos/$id/edit',
     path: '/todos/$id/edit',
     getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAgentsAgentIdEditRoute =
+  AuthenticatedAgentsAgentIdEditRouteImport.update({
+    id: '/agents/$agentId/edit',
+    path: '/agents/$agentId/edit',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedAgentsAgentIdChatRoute =
+  AuthenticatedAgentsAgentIdChatRouteImport.update({
+    id: '/agents/$agentId/chat',
+    path: '/agents/$agentId/chat',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const ApiProcessDocumentServerRoute =
+  ApiProcessDocumentServerRouteImport.update({
+    id: '/api/process-document',
+    path: '/api/process-document',
+    getParentRoute: () => rootServerRouteImport,
   } as any)
 const ApiHealthServerRoute = ApiHealthServerRouteImport.update({
   id: '/api/health',
@@ -156,10 +195,41 @@ const ApiAuthSplatServerRoute = ApiAuthSplatServerRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootServerRouteImport,
 } as any)
+const ApiToolsHubspotCompleteServerRoute =
+  ApiToolsHubspotCompleteServerRouteImport.update({
+    id: '/api/tools/hubspot/complete',
+    path: '/api/tools/hubspot/complete',
+    getParentRoute: () => rootServerRouteImport,
+  } as any)
+const ApiToolsHubspotCallbackServerRoute =
+  ApiToolsHubspotCallbackServerRouteImport.update({
+    id: '/api/tools/hubspot/callback',
+    path: '/api/tools/hubspot/callback',
+    getParentRoute: () => rootServerRouteImport,
+  } as any)
+const ApiToolsGoogleCompleteServerRoute =
+  ApiToolsGoogleCompleteServerRouteImport.update({
+    id: '/api/tools/google/complete',
+    path: '/api/tools/google/complete',
+    getParentRoute: () => rootServerRouteImport,
+  } as any)
+const ApiToolsGoogleCallbackServerRoute =
+  ApiToolsGoogleCallbackServerRouteImport.update({
+    id: '/api/tools/google/callback',
+    path: '/api/tools/google/callback',
+    getParentRoute: () => rootServerRouteImport,
+  } as any)
+const ApiAgentsAgentIdChatServerRoute =
+  ApiAgentsAgentIdChatServerRouteImport.update({
+    id: '/api/agents/$agentId/chat',
+    path: '/api/agents/$agentId/chat',
+    getParentRoute: () => rootServerRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/billing': typeof AuthenticatedBillingRoute
   '/chat-demo': typeof AuthenticatedChatDemoRoute
+  '/connections': typeof AuthenticatedConnectionsRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/select-organization': typeof AuthenticatedSelectOrganizationRoute
@@ -169,14 +239,18 @@ export interface FileRoutesByFullPath {
   '/auth/signin': typeof AuthSigninRoute
   '/invite/$invitationId': typeof InviteInvitationIdRoute
   '/': typeof AuthenticatedIndexRoute
+  '/agents/new': typeof AuthenticatedAgentsNewRoute
   '/superadmin/users': typeof AuthenticatedSuperadminUsersRoute
   '/superadmin/workspaces': typeof AuthenticatedSuperadminWorkspacesRoute
   '/superadmin/': typeof AuthenticatedSuperadminIndexRoute
+  '/agents/$agentId/chat': typeof AuthenticatedAgentsAgentIdChatRoute
+  '/agents/$agentId/edit': typeof AuthenticatedAgentsAgentIdEditRoute
   '/todos/$id/edit': typeof AuthenticatedTodosIdEditRoute
 }
 export interface FileRoutesByTo {
   '/billing': typeof AuthenticatedBillingRoute
   '/chat-demo': typeof AuthenticatedChatDemoRoute
+  '/connections': typeof AuthenticatedConnectionsRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/select-organization': typeof AuthenticatedSelectOrganizationRoute
@@ -185,9 +259,12 @@ export interface FileRoutesByTo {
   '/auth/signin': typeof AuthSigninRoute
   '/invite/$invitationId': typeof InviteInvitationIdRoute
   '/': typeof AuthenticatedIndexRoute
+  '/agents/new': typeof AuthenticatedAgentsNewRoute
   '/superadmin/users': typeof AuthenticatedSuperadminUsersRoute
   '/superadmin/workspaces': typeof AuthenticatedSuperadminWorkspacesRoute
   '/superadmin': typeof AuthenticatedSuperadminIndexRoute
+  '/agents/$agentId/chat': typeof AuthenticatedAgentsAgentIdChatRoute
+  '/agents/$agentId/edit': typeof AuthenticatedAgentsAgentIdEditRoute
   '/todos/$id/edit': typeof AuthenticatedTodosIdEditRoute
 }
 export interface FileRoutesById {
@@ -195,6 +272,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/_authenticated/billing': typeof AuthenticatedBillingRoute
   '/_authenticated/chat-demo': typeof AuthenticatedChatDemoRoute
+  '/_authenticated/connections': typeof AuthenticatedConnectionsRoute
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/select-organization': typeof AuthenticatedSelectOrganizationRoute
@@ -204,9 +282,12 @@ export interface FileRoutesById {
   '/auth/signin': typeof AuthSigninRoute
   '/invite/$invitationId': typeof InviteInvitationIdRoute
   '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_authenticated/agents/new': typeof AuthenticatedAgentsNewRoute
   '/_authenticated/superadmin/users': typeof AuthenticatedSuperadminUsersRoute
   '/_authenticated/superadmin/workspaces': typeof AuthenticatedSuperadminWorkspacesRoute
   '/_authenticated/superadmin/': typeof AuthenticatedSuperadminIndexRoute
+  '/_authenticated/agents/$agentId/chat': typeof AuthenticatedAgentsAgentIdChatRoute
+  '/_authenticated/agents/$agentId/edit': typeof AuthenticatedAgentsAgentIdEditRoute
   '/_authenticated/todos/$id/edit': typeof AuthenticatedTodosIdEditRoute
 }
 export interface FileRouteTypes {
@@ -214,6 +295,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/billing'
     | '/chat-demo'
+    | '/connections'
     | '/onboarding'
     | '/profile'
     | '/select-organization'
@@ -223,14 +305,18 @@ export interface FileRouteTypes {
     | '/auth/signin'
     | '/invite/$invitationId'
     | '/'
+    | '/agents/new'
     | '/superadmin/users'
     | '/superadmin/workspaces'
     | '/superadmin/'
+    | '/agents/$agentId/chat'
+    | '/agents/$agentId/edit'
     | '/todos/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/billing'
     | '/chat-demo'
+    | '/connections'
     | '/onboarding'
     | '/profile'
     | '/select-organization'
@@ -239,15 +325,19 @@ export interface FileRouteTypes {
     | '/auth/signin'
     | '/invite/$invitationId'
     | '/'
+    | '/agents/new'
     | '/superadmin/users'
     | '/superadmin/workspaces'
     | '/superadmin'
+    | '/agents/$agentId/chat'
+    | '/agents/$agentId/edit'
     | '/todos/$id/edit'
   id:
     | '__root__'
     | '/_authenticated'
     | '/_authenticated/billing'
     | '/_authenticated/chat-demo'
+    | '/_authenticated/connections'
     | '/_authenticated/onboarding'
     | '/_authenticated/profile'
     | '/_authenticated/select-organization'
@@ -257,9 +347,12 @@ export interface FileRouteTypes {
     | '/auth/signin'
     | '/invite/$invitationId'
     | '/_authenticated/'
+    | '/_authenticated/agents/new'
     | '/_authenticated/superadmin/users'
     | '/_authenticated/superadmin/workspaces'
     | '/_authenticated/superadmin/'
+    | '/_authenticated/agents/$agentId/chat'
+    | '/_authenticated/agents/$agentId/edit'
     | '/_authenticated/todos/$id/edit'
   fileRoutesById: FileRoutesById
 }
@@ -271,69 +364,111 @@ export interface RootRouteChildren {
 export interface FileServerRoutesByFullPath {
   '/api/chat': typeof ApiChatServerRoute
   '/api/health': typeof ApiHealthServerRoute
+  '/api/process-document': typeof ApiProcessDocumentServerRoute
   '/api/auth/$': typeof ApiAuthSplatServerRoute
   '/api/avatars/$': typeof ApiAvatarsSplatServerRoute
   '/api/avatars/delete': typeof ApiAvatarsDeleteServerRoute
   '/api/avatars/upload': typeof ApiAvatarsUploadServerRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookServerRoute
+  '/api/agents/$agentId/chat': typeof ApiAgentsAgentIdChatServerRoute
+  '/api/tools/google/callback': typeof ApiToolsGoogleCallbackServerRoute
+  '/api/tools/google/complete': typeof ApiToolsGoogleCompleteServerRoute
+  '/api/tools/hubspot/callback': typeof ApiToolsHubspotCallbackServerRoute
+  '/api/tools/hubspot/complete': typeof ApiToolsHubspotCompleteServerRoute
 }
 export interface FileServerRoutesByTo {
   '/api/chat': typeof ApiChatServerRoute
   '/api/health': typeof ApiHealthServerRoute
+  '/api/process-document': typeof ApiProcessDocumentServerRoute
   '/api/auth/$': typeof ApiAuthSplatServerRoute
   '/api/avatars/$': typeof ApiAvatarsSplatServerRoute
   '/api/avatars/delete': typeof ApiAvatarsDeleteServerRoute
   '/api/avatars/upload': typeof ApiAvatarsUploadServerRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookServerRoute
+  '/api/agents/$agentId/chat': typeof ApiAgentsAgentIdChatServerRoute
+  '/api/tools/google/callback': typeof ApiToolsGoogleCallbackServerRoute
+  '/api/tools/google/complete': typeof ApiToolsGoogleCompleteServerRoute
+  '/api/tools/hubspot/callback': typeof ApiToolsHubspotCallbackServerRoute
+  '/api/tools/hubspot/complete': typeof ApiToolsHubspotCompleteServerRoute
 }
 export interface FileServerRoutesById {
   __root__: typeof rootServerRouteImport
   '/api/chat': typeof ApiChatServerRoute
   '/api/health': typeof ApiHealthServerRoute
+  '/api/process-document': typeof ApiProcessDocumentServerRoute
   '/api/auth/$': typeof ApiAuthSplatServerRoute
   '/api/avatars/$': typeof ApiAvatarsSplatServerRoute
   '/api/avatars/delete': typeof ApiAvatarsDeleteServerRoute
   '/api/avatars/upload': typeof ApiAvatarsUploadServerRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookServerRoute
+  '/api/agents/$agentId/chat': typeof ApiAgentsAgentIdChatServerRoute
+  '/api/tools/google/callback': typeof ApiToolsGoogleCallbackServerRoute
+  '/api/tools/google/complete': typeof ApiToolsGoogleCompleteServerRoute
+  '/api/tools/hubspot/callback': typeof ApiToolsHubspotCallbackServerRoute
+  '/api/tools/hubspot/complete': typeof ApiToolsHubspotCompleteServerRoute
 }
 export interface FileServerRouteTypes {
   fileServerRoutesByFullPath: FileServerRoutesByFullPath
   fullPaths:
     | '/api/chat'
     | '/api/health'
+    | '/api/process-document'
     | '/api/auth/$'
     | '/api/avatars/$'
     | '/api/avatars/delete'
     | '/api/avatars/upload'
     | '/api/stripe/webhook'
+    | '/api/agents/$agentId/chat'
+    | '/api/tools/google/callback'
+    | '/api/tools/google/complete'
+    | '/api/tools/hubspot/callback'
+    | '/api/tools/hubspot/complete'
   fileServerRoutesByTo: FileServerRoutesByTo
   to:
     | '/api/chat'
     | '/api/health'
+    | '/api/process-document'
     | '/api/auth/$'
     | '/api/avatars/$'
     | '/api/avatars/delete'
     | '/api/avatars/upload'
     | '/api/stripe/webhook'
+    | '/api/agents/$agentId/chat'
+    | '/api/tools/google/callback'
+    | '/api/tools/google/complete'
+    | '/api/tools/hubspot/callback'
+    | '/api/tools/hubspot/complete'
   id:
     | '__root__'
     | '/api/chat'
     | '/api/health'
+    | '/api/process-document'
     | '/api/auth/$'
     | '/api/avatars/$'
     | '/api/avatars/delete'
     | '/api/avatars/upload'
     | '/api/stripe/webhook'
+    | '/api/agents/$agentId/chat'
+    | '/api/tools/google/callback'
+    | '/api/tools/google/complete'
+    | '/api/tools/hubspot/callback'
+    | '/api/tools/hubspot/complete'
   fileServerRoutesById: FileServerRoutesById
 }
 export interface RootServerRouteChildren {
   ApiChatServerRoute: typeof ApiChatServerRoute
   ApiHealthServerRoute: typeof ApiHealthServerRoute
+  ApiProcessDocumentServerRoute: typeof ApiProcessDocumentServerRoute
   ApiAuthSplatServerRoute: typeof ApiAuthSplatServerRoute
   ApiAvatarsSplatServerRoute: typeof ApiAvatarsSplatServerRoute
   ApiAvatarsDeleteServerRoute: typeof ApiAvatarsDeleteServerRoute
   ApiAvatarsUploadServerRoute: typeof ApiAvatarsUploadServerRoute
   ApiStripeWebhookServerRoute: typeof ApiStripeWebhookServerRoute
+  ApiAgentsAgentIdChatServerRoute: typeof ApiAgentsAgentIdChatServerRoute
+  ApiToolsGoogleCallbackServerRoute: typeof ApiToolsGoogleCallbackServerRoute
+  ApiToolsGoogleCompleteServerRoute: typeof ApiToolsGoogleCompleteServerRoute
+  ApiToolsHubspotCallbackServerRoute: typeof ApiToolsHubspotCallbackServerRoute
+  ApiToolsHubspotCompleteServerRoute: typeof ApiToolsHubspotCompleteServerRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -408,6 +543,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOnboardingRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/connections': {
+      id: '/_authenticated/connections'
+      path: '/connections'
+      fullPath: '/connections'
+      preLoaderRoute: typeof AuthenticatedConnectionsRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/chat-demo': {
       id: '/_authenticated/chat-demo'
       path: '/chat-demo'
@@ -443,6 +585,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSuperadminUsersRouteImport
       parentRoute: typeof AuthenticatedSuperadminRoute
     }
+    '/_authenticated/agents/new': {
+      id: '/_authenticated/agents/new'
+      path: '/agents/new'
+      fullPath: '/agents/new'
+      preLoaderRoute: typeof AuthenticatedAgentsNewRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/todos/$id/edit': {
       id: '/_authenticated/todos/$id/edit'
       path: '/todos/$id/edit'
@@ -450,10 +599,31 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTodosIdEditRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/agents/$agentId/edit': {
+      id: '/_authenticated/agents/$agentId/edit'
+      path: '/agents/$agentId/edit'
+      fullPath: '/agents/$agentId/edit'
+      preLoaderRoute: typeof AuthenticatedAgentsAgentIdEditRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/agents/$agentId/chat': {
+      id: '/_authenticated/agents/$agentId/chat'
+      path: '/agents/$agentId/chat'
+      fullPath: '/agents/$agentId/chat'
+      preLoaderRoute: typeof AuthenticatedAgentsAgentIdChatRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 declare module '@tanstack/react-start/server' {
   interface ServerFileRoutesByPath {
+    '/api/process-document': {
+      id: '/api/process-document'
+      path: '/api/process-document'
+      fullPath: '/api/process-document'
+      preLoaderRoute: typeof ApiProcessDocumentServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
     '/api/health': {
       id: '/api/health'
       path: '/api/health'
@@ -503,6 +673,41 @@ declare module '@tanstack/react-start/server' {
       preLoaderRoute: typeof ApiAuthSplatServerRouteImport
       parentRoute: typeof rootServerRouteImport
     }
+    '/api/tools/hubspot/complete': {
+      id: '/api/tools/hubspot/complete'
+      path: '/api/tools/hubspot/complete'
+      fullPath: '/api/tools/hubspot/complete'
+      preLoaderRoute: typeof ApiToolsHubspotCompleteServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
+    '/api/tools/hubspot/callback': {
+      id: '/api/tools/hubspot/callback'
+      path: '/api/tools/hubspot/callback'
+      fullPath: '/api/tools/hubspot/callback'
+      preLoaderRoute: typeof ApiToolsHubspotCallbackServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
+    '/api/tools/google/complete': {
+      id: '/api/tools/google/complete'
+      path: '/api/tools/google/complete'
+      fullPath: '/api/tools/google/complete'
+      preLoaderRoute: typeof ApiToolsGoogleCompleteServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
+    '/api/tools/google/callback': {
+      id: '/api/tools/google/callback'
+      path: '/api/tools/google/callback'
+      fullPath: '/api/tools/google/callback'
+      preLoaderRoute: typeof ApiToolsGoogleCallbackServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
+    '/api/agents/$agentId/chat': {
+      id: '/api/agents/$agentId/chat'
+      path: '/api/agents/$agentId/chat'
+      fullPath: '/api/agents/$agentId/chat'
+      preLoaderRoute: typeof ApiAgentsAgentIdChatServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
   }
 }
 
@@ -528,6 +733,7 @@ const AuthenticatedSuperadminRouteWithChildren =
 interface AuthenticatedRouteChildren {
   AuthenticatedBillingRoute: typeof AuthenticatedBillingRoute
   AuthenticatedChatDemoRoute: typeof AuthenticatedChatDemoRoute
+  AuthenticatedConnectionsRoute: typeof AuthenticatedConnectionsRoute
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedSelectOrganizationRoute: typeof AuthenticatedSelectOrganizationRoute
@@ -535,12 +741,16 @@ interface AuthenticatedRouteChildren {
   AuthenticatedSuperadminRoute: typeof AuthenticatedSuperadminRouteWithChildren
   AuthenticatedTeamRoute: typeof AuthenticatedTeamRoute
   AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+  AuthenticatedAgentsNewRoute: typeof AuthenticatedAgentsNewRoute
+  AuthenticatedAgentsAgentIdChatRoute: typeof AuthenticatedAgentsAgentIdChatRoute
+  AuthenticatedAgentsAgentIdEditRoute: typeof AuthenticatedAgentsAgentIdEditRoute
   AuthenticatedTodosIdEditRoute: typeof AuthenticatedTodosIdEditRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedBillingRoute: AuthenticatedBillingRoute,
   AuthenticatedChatDemoRoute: AuthenticatedChatDemoRoute,
+  AuthenticatedConnectionsRoute: AuthenticatedConnectionsRoute,
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedSelectOrganizationRoute: AuthenticatedSelectOrganizationRoute,
@@ -548,6 +758,9 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedSuperadminRoute: AuthenticatedSuperadminRouteWithChildren,
   AuthenticatedTeamRoute: AuthenticatedTeamRoute,
   AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+  AuthenticatedAgentsNewRoute: AuthenticatedAgentsNewRoute,
+  AuthenticatedAgentsAgentIdChatRoute: AuthenticatedAgentsAgentIdChatRoute,
+  AuthenticatedAgentsAgentIdEditRoute: AuthenticatedAgentsAgentIdEditRoute,
   AuthenticatedTodosIdEditRoute: AuthenticatedTodosIdEditRoute,
 }
 
@@ -566,11 +779,17 @@ export const routeTree = rootRouteImport
 const rootServerRouteChildren: RootServerRouteChildren = {
   ApiChatServerRoute: ApiChatServerRoute,
   ApiHealthServerRoute: ApiHealthServerRoute,
+  ApiProcessDocumentServerRoute: ApiProcessDocumentServerRoute,
   ApiAuthSplatServerRoute: ApiAuthSplatServerRoute,
   ApiAvatarsSplatServerRoute: ApiAvatarsSplatServerRoute,
   ApiAvatarsDeleteServerRoute: ApiAvatarsDeleteServerRoute,
   ApiAvatarsUploadServerRoute: ApiAvatarsUploadServerRoute,
   ApiStripeWebhookServerRoute: ApiStripeWebhookServerRoute,
+  ApiAgentsAgentIdChatServerRoute: ApiAgentsAgentIdChatServerRoute,
+  ApiToolsGoogleCallbackServerRoute: ApiToolsGoogleCallbackServerRoute,
+  ApiToolsGoogleCompleteServerRoute: ApiToolsGoogleCompleteServerRoute,
+  ApiToolsHubspotCallbackServerRoute: ApiToolsHubspotCallbackServerRoute,
+  ApiToolsHubspotCompleteServerRoute: ApiToolsHubspotCompleteServerRoute,
 }
 export const serverRouteTree = rootServerRouteImport
   ._addFileChildren(rootServerRouteChildren)

@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-import { TodosTablePage } from '@/features/todos/components/todos-table-page'
+import { AgentsGrid } from '@/features/agents/components/AgentsGrid'
 
 export const Route = createFileRoute('/_authenticated/')({
-  component: TodosTablePage,
+  component: AgentsGrid,
 })

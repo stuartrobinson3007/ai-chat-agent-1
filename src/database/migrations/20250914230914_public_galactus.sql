@@ -1,0 +1,1 @@
+ALTER TABLE "tool_connections" ALTER COLUMN "connected_by" DROP NOT NULL;

@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { ChatWithElements } from '@/features/chat-demo/components/ChatWithElements'
+import { ChatWithRAG } from '@/features/chat-demo/components/ChatWithRAG'
 
 export const Route = createFileRoute('/_authenticated/chat-demo')({
   component: ChatDemoPage,
@@ -8,7 +8,7 @@ export const Route = createFileRoute('/_authenticated/chat-demo')({
 function ChatDemoPage() {
   return (
     <div className="min-h-screen bg-background">
-      <ChatWithElements />
+      <ChatWithRAG />
     </div>
   )
 }

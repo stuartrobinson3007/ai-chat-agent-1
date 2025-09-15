@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { useChat, UIMessage } from '@ai-sdk/react'
-import { DefaultChatTransport } from 'ai'
+// import { DefaultChatTransport } from 'ai' // Not needed anymore
 import {
   Conversation,
   ConversationContent,
